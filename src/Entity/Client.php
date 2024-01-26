@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
@@ -51,6 +52,12 @@ class Client
 
     #[ORM\OneToOne(mappedBy: 'client_id', cascade: ['persist', 'remove'])]
     private ?Transaction $transaction = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $created = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updated = null;
 
     public function __construct()
     {
@@ -225,6 +232,30 @@ class Client
         }
 
         $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): static
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): static
+    {
+        $this->updated = $updated;
 
         return $this;
     }
